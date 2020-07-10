@@ -7,7 +7,6 @@ $data = json_decode(
     file_get_contents('https://covid.ourworldindata.org/data/owid-covid-data.json'),
     true
 );
-var_dump(array_keys($data));
 
 $countries = new Countries($data);
 
