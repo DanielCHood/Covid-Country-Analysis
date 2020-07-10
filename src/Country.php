@@ -6,6 +6,7 @@ use DateTime;
 
 class Country
 {
+    private $countryCode;
     private $continent;
     private $location;
     private $population;
@@ -25,8 +26,10 @@ class Country
 
     private $statCollection;
 
-    public function __construct(array $data)
+    public function __construct(string $countryCode, array $data)
     {
+        $this->countryCode = $countryCode;
+
         foreach ($data as $key => $value) {
             $setterMethod = "set" . str_replace(" ", "", ucwords(str_replace("_", " ", $key)));
             if (is_callable([$this, $setterMethod])) {
@@ -37,6 +40,10 @@ class Country
         }
     }
 
+    public function getCountryCode(): string {
+        return $this->countryCode;
+    }
+
     public function getFirstCaseDate(): DateTime
     {
         return $this->statCollection->getFirstCaseEntry()->getDate();
@@ -45,6 +52,26 @@ class Country
     public function getDayByOffset(int $offset): ?DailyStat
     {
         return $this->statCollection->getByOffset($offset);
+    }
+
+    public function getLastCaseEntryIndex(): int {
+        return $this->statCollection->getLastCaseEntryIndex();
+    }
+
+    public function getLocation(): string {
+        return $this->location;
+    }
+
+    public function getPopulationDensity(): float {
+        return $this->population_density ?? 0.00;
+    }
+
+    public function getGdpPerCapita(): float {
+        return $this->gdp_per_capita ?? 0.00;
+    }
+
+    public function getHospitalBedsPerThousand(): float {
+        return $this->hospital_beds_per_thousand ?? 0.00;
     }
 
     private function setData($data)

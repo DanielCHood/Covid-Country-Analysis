@@ -16,11 +16,11 @@ class Countries
     {
         foreach ($data as $countryCode => $country) {
             if ($countryCode === self::OWID_WRL) {
-                $this->owid_wrl = new Country($country);
+                $this->owid_wrl = new Country($countryCode, $country);
                 continue;
             }
 
-            $this->countries[$countryCode] = new Country($country);
+            $this->countries[$countryCode] = new Country($countryCode, $country);
         }
     }
 
@@ -36,6 +36,36 @@ class Countries
         }
 
         return $this->countries[$countryCode];
+    }
+
+    public function getClosest(Country $country, string $method): Country {
+        if (!is_callable([$country, $method])) {
+            throw new Exception("Country::" . $method . ' does not exist.');
+        }
+
+        $dayEntries = $country->getLastCaseEntryIndex();
+        $closestValue = null;
+        $closestCountry = null;
+        $baseline = $country->{$method}();
+
+        foreach ($this->countries as $comparison) {
+            if ($comparison === $country) {
+                continue;
+            }
+
+            if (!($comparison->getDayByOffset(floor($dayEntries)/2) instanceof DailyStat)) {
+                continue;
+            }
+
+            $difference = abs($baseline - $comparison->{$method}());
+            if (is_null($closestValue) || $difference < $closestValue) {
+                $closestValue = $difference;
+                $closestCountry = $comparison;
+            }
+        }
+
+        return $closestCountry;
+
     }
 
     public function getWorldWideAverages(string $type, int $offset): float
