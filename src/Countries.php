@@ -2,8 +2,6 @@
 
 namespace Dch\Covid;
 
-use Throwable;
-
 class Countries
 {
     private const OWID_WRL = 'OWID_WRL';
@@ -38,7 +36,8 @@ class Countries
         return $this->countries[$countryCode];
     }
 
-    public function getClosest(Country $country, string $method): Country {
+    public function getClosest(Country $country, string $method): Country
+    {
         if (!is_callable([$country, $method])) {
             throw new Exception("Country::" . $method . ' does not exist.');
         }
@@ -65,7 +64,6 @@ class Countries
         }
 
         return $closestCountry;
-
     }
 
     public function getWorldWideAverages(string $type, int $offset): float

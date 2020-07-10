@@ -6,6 +6,7 @@ class StatCollection
 {
     private $entries = [];
     private $firstCaseEntryIndex = null;
+    private $lastCaseEntryIndex = null;
 
     public function __construct(array $data)
     {
@@ -25,7 +26,12 @@ class StatCollection
         return $this->entries[$index] ?? null;
     }
 
-    private function getFirstCaseEntryIndex(): int
+    public function getLastCaseEntryIndex(): int
+    {
+        return count($this->entries) - 1;
+    }
+
+    private function getFirstCaseEntryIndex(): ?int
     {
         if ($this->firstCaseEntryIndex !== null) {
             return $this->firstCaseEntryIndex;
@@ -37,5 +43,7 @@ class StatCollection
                 return $index;
             }
         }
+
+        return null;
     }
 }

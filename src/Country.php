@@ -40,7 +40,8 @@ class Country
         }
     }
 
-    public function getCountryCode(): string {
+    public function getCountryCode(): string
+    {
         return $this->countryCode;
     }
 
@@ -54,23 +55,28 @@ class Country
         return $this->statCollection->getByOffset($offset);
     }
 
-    public function getLastCaseEntryIndex(): int {
+    public function getLastCaseEntryIndex(): int
+    {
         return $this->statCollection->getLastCaseEntryIndex();
     }
 
-    public function getLocation(): string {
+    public function getLocation(): string
+    {
         return $this->location;
     }
 
-    public function getPopulationDensity(): float {
+    public function getPopulationDensity(): float
+    {
         return $this->population_density ?? 0.00;
     }
 
-    public function getGdpPerCapita(): float {
+    public function getGdpPerCapita(): float
+    {
         return $this->gdp_per_capita ?? 0.00;
     }
 
-    public function getHospitalBedsPerThousand(): float {
+    public function getHospitalBedsPerThousand(): float
+    {
         return $this->hospital_beds_per_thousand ?? 0.00;
     }
 

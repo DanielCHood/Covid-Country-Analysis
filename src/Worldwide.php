@@ -2,8 +2,6 @@
 
 namespace Dch\Covid;
 
-use Throwable;
-
 class Worldwide
 {
     private $countries = [];
@@ -32,19 +30,17 @@ class Worldwide
         foreach ($this->countries->getCountryCodes() as $countryCode) {
             $country = $this->countries->getCountry($countryCode);
             $dayIndex = 0;
-            try {
-                while (true) {
-                    $dayIndex++;
-                    $dailyStat = $country->getDayByOffset($dayIndex);
-                    if (is_null($dailyStat)) {
-                        break;
-                    }
 
-                    $this->averages[$dayIndex]['cases'][$countryCode] = $dailyStat->getTotalCasesPerMillion();
-                    $this->averages[$dayIndex]['deaths'][$countryCode] = $dailyStat->getTotalDeathsPerMillion();
-                    $this->averages[$dayIndex]['tests'][$countryCode] = $dailyStat->getTotalTestsPerThousand();
+            while (true) {
+                $dayIndex++;
+                $dailyStat = $country->getDayByOffset($dayIndex);
+                if (is_null($dailyStat)) {
+                    break;
                 }
-            } catch (Throwable $e) {
+
+                $this->averages[$dayIndex]['cases'][$countryCode] = $dailyStat->getTotalCasesPerMillion();
+                $this->averages[$dayIndex]['deaths'][$countryCode] = $dailyStat->getTotalDeathsPerMillion();
+                $this->averages[$dayIndex]['tests'][$countryCode] = $dailyStat->getTotalTestsPerThousand();
             }
         }
     }
@@ -53,27 +49,25 @@ class Worldwide
     {
         foreach ($this->countries->getCountryCodes() as $countryCode) {
             $country = $this->countries->getCountry($countryCode);
-            try {
-                $dayIndex = 0;
-                while (true) {
-                    $dayIndex++;
-                    $dailyStat = $country->getDayByOffset($dayIndex);
-                    if (is_null($dailyStat)) {
-                        break;
-                    }
 
-                    $cases = $dailyStat->getTotalCasesPerMillion();
-                    $deaths = $dailyStat->getTotalDeathsPerMillion();
-                    $tests = $dailyStat->getTotalTestsPerThousand();
-
-                    foreach (['cases', 'deaths', 'tests'] as $type) {
-                        $this->rankings[$countryCode][$dayIndex][$type] = [
-                            'rank' => $this->getPositionForOffsetByType($type, $dayIndex, $$type),
-                            'total' => $this->getTotalQualifyingForOffset($type, $dayIndex)
-                        ];
-                    }
+            $dayIndex = 0;
+            while (true) {
+                $dayIndex++;
+                $dailyStat = $country->getDayByOffset($dayIndex);
+                if (is_null($dailyStat)) {
+                    break;
                 }
-            } catch (Throwable $e) {
+    
+                $cases = $dailyStat->getTotalCasesPerMillion();
+                $deaths = $dailyStat->getTotalDeathsPerMillion();
+                $tests = $dailyStat->getTotalTestsPerThousand();
+
+                foreach (['cases', 'deaths', 'tests'] as $type) {
+                    $this->rankings[$countryCode][$dayIndex][$type] = [
+                        'rank' => $this->getPositionForOffsetByType($type, $dayIndex, $$type),
+                        'total' => $this->getTotalQualifyingForOffset($type, $dayIndex)
+                    ];
+                }
             }
         }
     }
