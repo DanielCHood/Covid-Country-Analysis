@@ -13,5 +13,8 @@
         "psr-4": {
             "Dch\\Covid\\": "src/"
         }
+    },
+    "require-dev": {
+        "nunomaduro/phpinsights": "^1.14"
     }
 }
