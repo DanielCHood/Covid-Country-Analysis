@@ -14,6 +14,10 @@ class Countries {
         }
     }
 
+    public function getCountryCodes(): array {
+        return array_keys($this->countries);
+    }
+
     public function compileAveragesDaysAfterFirst(): void {
         foreach (array_keys($this->countries) as $countryCode) {
             $country = $this->getCountry($countryCode);
