@@ -17,7 +17,12 @@ $ranks = $worldwide->getRankingsForCountryCode('USA');
 
 echo "USA Rankings Per Day after initial case:\n";
 foreach ($ranks as $day => $info) {
+    if (!in_array($day, [5, 10, 30, 60, 90, 120, 150])) {
+        continue;
+    }
+
     echo $day . ") " . "cases: " . $info['cases']['rank'] . "/" . $info['cases']['total'];
+    echo "; tests: " . $info['tests']['rank'] . "/" . $info['tests']['total'];
     echo "; deaths: " . $info['deaths']['rank'] . "/" . $info['deaths']['total'] . "\n";
 }
 
