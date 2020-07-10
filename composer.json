@@ -1,0 +1,17 @@
+{
+    "name": "dch/covid",
+    "description": "Analyzing covid data per country",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Daniel Hood",
+            "email": "mrdhood@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Dch\\Covid\\": "src/"
+        }
+    }
+}
