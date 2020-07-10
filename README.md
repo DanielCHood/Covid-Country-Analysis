@@ -21,7 +21,7 @@ $countries = new Countries($data);
 
 ## Getting a country's information
 
-```
+```php
 $country = $countries->getCountry('USA'); // returns the `Dch\Covid\Country` instance for the USA.
 $country->getFirstCaseDate(); // returns the DateTime instance of the first day that there were cases in the country
 $country->getDaybyOffset(5); // gets the daily stats for the 5th day _after_ the first case so if `getFirstCaseDate() was Jan 1, this was will return Jan 6.
@@ -35,7 +35,7 @@ $country->getHospitalBedsPerThousand(); // accessor for Country::$hospital_beds_
 
 `$country->getDayByOffset(int $offset)` returns an instance of `Dch\Covid\DailyStat`.
 
-```
+```php
 $country = $countries->getCountry('USA');
 $dayStats = $country->getDayByOffset(5);
 
@@ -45,3 +45,7 @@ $dayStats->getTotalCasesPerMillion(); // returns the number of cases per million
 $dayStats->getTotalDeathsPerMillion(); // returns the number of deaths per million residents
 $dayStats->getTotalTestsPerThousand(); // returns the number of tests done per thousand residents
 ```
+
+## Additional code examples
+
+Additional code samples can be found in the projects root directory
