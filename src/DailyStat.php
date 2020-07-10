@@ -11,9 +11,11 @@ class DailyStat
     private $new_deaths;
     private $total_cases_per_million;
     private $total_deaths_per_million;
+    private $total_tests_per_thousand;
     private $unknown = [];
 
-    public function __construct(array $stats) {
+    public function __construct(array $stats)
+    {
         foreach ($stats as $key => $value) {
             if (!property_exists($this, $key)) {
                 $this->unknown[$key] = $value;
@@ -24,7 +26,8 @@ class DailyStat
         }
     }
 
-    public function getDate(): DateTime {
+    public function getDate(): DateTime
+    {
         if (is_string($this->date)) {
             $this->date = new DateTime($this->date);
         }
@@ -32,19 +35,28 @@ class DailyStat
         return $this->date;
     }
 
-    public function getNewCases(): int {
+    public function getNewCases(): int
+    {
         return $this->new_cases ?? 0;
     }
 
-    public function getNewDeaths(): int {
+    public function getNewDeaths(): int
+    {
         return $this->new_deaths ?? 0;
     }
 
-    public function getTotalCasesPerMillion(): float {
+    public function getTotalCasesPerMillion(): float
+    {
         return $this->total_cases_per_million ?? 0.00;
     }
 
-    public function getTotalDeathsPerMillion(): float {
+    public function getTotalDeathsPerMillion(): float
+    {
         return $this->total_deaths_per_million ?? 0.00;
+    }
+
+    public function getTotalTestsPerThousand(): float
+    {
+        return $this->total_tests_per_thousand ?? 0.00;
     }
 }

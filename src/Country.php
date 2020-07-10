@@ -4,7 +4,8 @@ namespace Dch\Covid;
 
 use DateTime;
 
-class Country {
+class Country
+{
     private $continent;
     private $location;
     private $population;
@@ -24,27 +25,30 @@ class Country {
 
     private $statCollection;
 
-    public function __construct(array $data) {
+    public function __construct(array $data)
+    {
         foreach ($data as $key => $value) {
             $setterMethod = "set" . str_replace(" ", "", ucwords(str_replace("_", " ", $key)));
             if (is_callable([$this, $setterMethod])) {
                 $this->{$setterMethod}($value);
-            }
-            elseif (property_exists($this, $key)) {
+            } elseif (property_exists($this, $key)) {
                 $this->{$key} = $value;
             }
         }
     }
 
-    public function getFirstCaseDate(): DateTime {
+    public function getFirstCaseDate(): DateTime
+    {
         return $this->statCollection->getFirstCaseEntry()->getDate();
     }
 
-    public function getDayByOffset(int $offset): ?DailyStat {
+    public function getDayByOffset(int $offset): ?DailyStat
+    {
         return $this->statCollection->getByOffset($offset);
     }
 
-    private function setData($data) {
+    private function setData($data)
+    {
         $this->statCollection = new StatCollection($data);
     }
 }

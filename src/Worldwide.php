@@ -4,31 +4,36 @@ namespace Dch\Covid;
 
 use Throwable;
 
-class Worldwide {
+class Worldwide
+{
     private $countries = [];
     private $averages = [];
     private $rankings = [];
 
-    public function __construct(Countries $countries) {
+    public function __construct(Countries $countries)
+    {
         $this->countries = $countries;
         $this->compileStats();
         $this->compileRankings();
     }
 
-    public function getRankingsForCountryCode(string $countryCode): array {
+    public function getRankingsForCountryCode(string $countryCode): array
+    {
         return $this->rankings[$countryCode] ?? [];
     }
 
-    public function getStatsForOffset(int $offset): array {
+    public function getStatsForOffset(int $offset): array
+    {
         return $this->averages[$offset] ?? [];
-    } 
+    }
 
-    private function compileStats(): void {
+    private function compileStats(): void
+    {
         foreach ($this->countries->getCountryCodes() as $countryCode) {
             $country = $this->countries->getCountry($countryCode);
             $dayIndex = 0;
             try {
-                while(true) {
+                while (true) {
                     $dayIndex++;
                     $dailyStat = $country->getDayByOffset($dayIndex);
                     if (is_null($dailyStat)) {
@@ -37,14 +42,15 @@ class Worldwide {
 
                     $this->averages[$dayIndex]['cases'][$countryCode] = $dailyStat->getTotalCasesPerMillion();
                     $this->averages[$dayIndex]['deaths'][$countryCode] = $dailyStat->getTotalDeathsPerMillion();
+                    $this->averages[$dayIndex]['tests'][$countryCode] = $dailyStat->getTotalTestsPerThousand();
                 }
             } catch (Throwable $e) {
-
             }
         }
     }
 
-    private function compileRankings(): void {
+    private function compileRankings(): void
+    {
         foreach ($this->countries->getCountryCodes() as $countryCode) {
             $country = $this->countries->getCountry($countryCode);
             try {
@@ -58,8 +64,9 @@ class Worldwide {
 
                     $cases = $dailyStat->getTotalCasesPerMillion();
                     $deaths = $dailyStat->getTotalDeathsPerMillion();
+                    $tests = $dailyStat->getTotalTestsPerThousand();
 
-                    foreach (['cases', 'deaths'] as $type) {
+                    foreach (['cases', 'deaths', 'tests'] as $type) {
                         $this->rankings[$countryCode][$dayIndex][$type] = [
                             'rank' => $this->getPositionForOffsetByType($type, $dayIndex, $$type),
                             'total' => $this->getTotalQualifyingForOffset($type, $dayIndex)
@@ -71,9 +78,10 @@ class Worldwide {
         }
     }
 
-    private function getPositionForOffsetByType(string $type, int $offset, float $stat): int {
+    private function getPositionForOffsetByType(string $type, int $offset, float $stat): int
+    {
         $worldwide = array_filter($this->averages[$offset][$type]);
-        uasort($worldwide, function($a, $b) {
+        uasort($worldwide, function ($a, $b) {
             if ($a === $b) {
                 return 0;
             }
@@ -91,7 +99,8 @@ class Worldwide {
         return $rank;
     }
 
-    private function getTotalQualifyingForOffset(string $type, int $offset): int {
+    private function getTotalQualifyingForOffset(string $type, int $offset): int
+    {
         $worldwide = array_filter($this->averages[$offset][$type]);
         return count($worldwide);
     }
