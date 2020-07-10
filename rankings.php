@@ -23,4 +23,14 @@ foreach ($ranks as $day => $info) {
 
 $countriesCurrentPositions = $worldwide->getStatsForOffset($day);
 
-var_dump($countriesCurrentPositions);
+echo "\n\n";
+
+echo "Countries at same stage:\n";
+foreach ($countriesCurrentPositions as $type => $data) {
+    echo "- " . $type . "\n";
+    asort($data);
+    foreach ($data as $countryCode => $perMillion) {
+        echo "-- " . $countryCode . ": " . $perMillion . "\n";
+    }
+    echo "\n";
+}
